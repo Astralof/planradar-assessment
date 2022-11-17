@@ -1,0 +1,52 @@
+version: '3.5'
+networks:
+  assessment:
+    driver: overlay
+    attachable: true
+services:
+  web:
+    image: planradarassessment:latest
+    entrypoint: /planradar-assessment/.devcontainer/docker-rm-server-pid.sh
+    # to sleep:
+    # command: ["sh", "-c", "tail -f /dev/null"]
+    command: ["rails", "server", "-b", "0.0.0.0", "-p", "3000"]
+    volumes:
+      - ..:/planradar-assessment
+    ports:
+      - '3000:3000'
+    env_file: .docker_rails_env
+  postgres:
+    image: postgres:9.6.3
+    volumes:
+      - ../data/pg:/pgdata
+    environment:
+      POSTGRES_DB: planradar-assessment_development
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD:
+      PGDATA: /pgdata
+  redis:
+    image: redis:latest
+    command: redis-server
+    volumes:
+      - ../data/redis:/data
+  sidekiq:
+    image: planradarassessment:latest
+    command: sidekiq -C config/sidekiq.yml
+    volumes:
+      - ..:/planradar-assessment
+    env_file: .docker_rails_env
+
+  clockwork:
+    # for development, attach separate container with
+    # docker run --rm -ti --network ticket-broker_default -v $(pwd):/ticket-broker registry.safing.network/dev/ticket-broker:latest /bin/bash
+    # in container, run command as below
+    image: planradarassessment:latest
+    command: /bin/bash -c "sleep 60 && clockwork lib/clock.rb"
+    volumes:
+      - ..:/ticket-broker
+    env_file: .docker_rails_env
+    depends_on:
+      - web
+      - postgres
+      - redis
+      - sidekiq

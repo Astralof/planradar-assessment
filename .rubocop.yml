@@ -1,0 +1,54 @@
+AllCops:
+  TargetRubyVersion: 2.5
+  Exclude:
+    - .git/**/*
+    - data/**/*
+    - db/**/*.rb
+    - lib/templates/**/*.rb
+    - lib/generators/**/*.rb
+    - log/**/*
+    - notes/**/*
+    - tmp/**/*
+    - config/environments/production.rb
+
+Documentation:
+  Enabled: false
+EmptyLineAfterGuardClause:
+  Enabled: false
+
+Metrics/BlockLength:
+  CountComments: false
+  Exclude:
+    - 'app/models/concerns/**/*.rb'
+    - 'spec/**/*.rb'
+    - 'config/**/*.rb'
+Metrics/LineLength:
+  Max: 100
+Metrics/MethodLength:
+  Max: 15 # default = 10
+Metrics/AbcSize:
+  Max: 22 # default = 15
+
+Style/ClassAndModuleChildren:
+  Exclude:
+    - 'app/api/v1/*.rb'
+    - 'app/workers/**/*.rb'
+    - 'app/models/**/*.rb'
+    - 'app/policies/**/*.rb'
+Style/EmptyMethod:
+  Enabled: false
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Layout/MultilineMethodCallIndentation:
+  Enabled: false
+
+Lint/AmbiguousBlockAssociation:
+  Exclude:
+    - 'spec/**/*.rb'
+
+Naming/VariableNumber:
+  Enabled: false
+
+Style/DoubleNegation:
+  Enabled: false
