@@ -30,6 +30,7 @@ ActiveRecord::Schema.define(version: 2022_11_17_135911) do
   create_table "users", force: :cascade do |t|
     t.string "name", limit: 255
     t.string "mail", limit: 255
+    t.boolean "wants_notifications", default: false
     t.integer "send_due_date_reminder", limit: 2
     t.integer "due_date_reminder_interval"
     t.time "due_date_reminder_time"
